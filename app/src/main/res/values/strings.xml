@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Bus Project</string>
     <string name="title_activity_bus_map">Map</string>
+    <string name="busStop">Go in front of Callahan main doors</string>
+    <string name="ok">Ok</string>
+
 </resources>
