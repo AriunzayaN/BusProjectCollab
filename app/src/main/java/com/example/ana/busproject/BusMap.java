@@ -75,8 +75,8 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
                 final Thread timer = new Thread() {
                     public void run() {
 
-                        String string = String.valueOf(latitude);
-                        Log.d("PRINT", string);
+//                        String string = String.valueOf(latitude);
+//                        Log.d("PRINT", string);
 //                            URL url = new URL(string);
 //                            url.openStream();
 
@@ -136,12 +136,36 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
 
         }
         // Callahan lat long approximate location
-        if((latitude > 42.553068 && latitude < 42.553710 ) && (longitude > -70.843716 && longitude < -70.843262 )){
+        else if((latitude > 42.553068 && latitude < 42.553710 ) && (longitude > -70.843716 && longitude < -70.843262 )){
             BusStopAlert busStopAlert = new BusStopAlert();
             busStopAlert.show(getFragmentManager(), "Bus Stop");
             busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.553728, -70.843230))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop Callahan"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.553728, -70.843230), 20));
+        }else if((latitude < 42.552341 && latitude > 42.552133) && (longitude < -70.842647 && longitude > -70.842673)){
+
+            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.552341, -70.842647))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.552341, -70.842647), 20));
+
+        }else if((latitude < 42.551589 && latitude > 42.551502) && (longitude < -70.841201 && longitude > -70.841657)){
+
+            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.551589, -70.841201))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.551589, -70.841201), 20));
+
+        }else if((latitude < 42.551281 && latitude > 42.551127) && (longitude < -70.841281 && longitude > -70.841464)){
+
+            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.551281, -70.841281))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.551281, -70.841281), 20));
+
+        }else if((latitude < 42.552293 && latitude > 42.551857) && (longitude < -70.837326 && longitude > -70.837752)){
+
+            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.552293, -70.837326))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.552293, -70.837326), 20));
+
         }
     }
 
