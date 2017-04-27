@@ -30,12 +30,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.lang.Thread.sleep;
 
@@ -57,7 +60,7 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_map);
         button = (Button) findViewById(R.id.button1);
-        text1 = (TextView) findViewById(R.id.text1);
+//        text1 = (TextView) findViewById(R.id.text1);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -83,22 +86,9 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
                     }
                 };
                 timer.start();
-                text1.append("\n " + latitude + " " + longitude);
-                fetchJson.doInBackground();
-             if (currmark == null) {
-                 currmark = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Cavalier Coach"));
-                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));}
-             else if (currmark != null) {
-                 currmark.remove();
-                 currmark = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Cavalier Coach"));
+                JSONArray jsa = fetchJson.doInBackground();
+                Log.d("JSON ARRAY", jsa.toString());
 
-                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
-
-                 busStopMarking(latitude, longitude);
-
-                }
             }
 
             @Override
@@ -121,54 +111,33 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
 
         configure_button();
 
+        final Thread timer = new Thread() {
+
+            public void run() {
+
+                Timer timer = new Timer();
+
+                TimerTask timerTask = new TimerTask() {
+
+                    @Override
+
+                    public void run() {
+
+                        fetchJson.doInBackground();
+
+                    }
+
+                };
+
+                timer.schedule(timerTask, 0, 3000);
+
+            }
+
+        };
+
+        timer.start();
 
     }
-
-    public void busStopMarking(double latitude,double longitude){
-
-        // LSB lat long approximate location
-        if((latitude > 42.553633 && latitude < 42.554337)&& (longitude > -70.842969 && longitude < -70.842358) ){
-
-             busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.553951, -70.843091))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop LSB"));
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.553951, -70.843091), 20));
-
-        }
-        // Callahan lat long approximate location
-        else if((latitude > 42.553068 && latitude < 42.553710 ) && (longitude > -70.843716 && longitude < -70.843262 )){
-            BusStopAlert busStopAlert = new BusStopAlert();
-            busStopAlert.show(getFragmentManager(), "Bus Stop");
-            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.553728, -70.843230))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop Callahan"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.553728, -70.843230), 20));
-        }else if((latitude < 42.552341 && latitude > 42.552133) && (longitude < -70.842647 && longitude > -70.842673)){
-
-            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.552341, -70.842647))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.552341, -70.842647), 20));
-
-        }else if((latitude < 42.551589 && latitude > 42.551502) && (longitude < -70.841201 && longitude > -70.841657)){
-
-            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.551589, -70.841201))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.551589, -70.841201), 20));
-
-        }else if((latitude < 42.551281 && latitude > 42.551127) && (longitude < -70.841281 && longitude > -70.841464)){
-
-            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.551281, -70.841281))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.551281, -70.841281), 20));
-
-        }else if((latitude < 42.552293 && latitude > 42.551857) && (longitude < -70.837326 && longitude > -70.837752)){
-
-            busStopMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(42.552293, -70.837326))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus)).title("Bus Stop"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.552293, -70.837326), 20));
-
-        }
-    }
-
 
 
 
@@ -197,14 +166,6 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-//        Log.d("Map", "Initialized");
-        // Add a marker in Sydney and move the camera
-//        LatLng beverly = new LatLng(42, -70);
-//
-//        mMap.addMarker(new MarkerOptions().position(beverly).title("Somewhere near Beverly"));
-//
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(beverly));
-
 
     }
 
@@ -220,7 +181,6 @@ public class BusMap extends FragmentActivity implements OnMapReadyCallback {
             }
             return;
         }
-
 
         // this code won'textView execute IF permissions are not allowed, because in the line above there is return statement.
         button.setOnClickListener(new View.OnClickListener() {

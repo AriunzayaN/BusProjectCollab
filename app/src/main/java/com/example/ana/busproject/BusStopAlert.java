@@ -18,7 +18,7 @@ public class BusStopAlert extends DialogFragment {
         builder.setMessage(R.string.busStop)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+                       // Do something
                     }
                 });
         return builder.create();

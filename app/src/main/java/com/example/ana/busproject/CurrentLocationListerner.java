@@ -5,6 +5,13 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
+
 /**
  * Created by Ana on 3/29/2017.
  */
@@ -15,11 +22,9 @@ public class CurrentLocationListerner implements LocationListener {
     public void onLocationChanged(Location location) {
         location.getLatitude();
         location.getLongitude();
+//
+       String myLocation = "Latitude = " + location.getLatitude() + " Longitude = " + location.getLongitude();
 
-        String myLocation = "Latitude = " + location.getLatitude() + " Longitude = " + location.getLongitude();
-
-        //I make a log to see the results
-        Log.e("MY CURRENT LOCATION", myLocation );
 
     }
 

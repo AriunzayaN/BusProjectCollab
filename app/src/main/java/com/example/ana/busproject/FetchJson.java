@@ -25,53 +25,34 @@ import java.net.URLConnection;
  * Created by Ana on 3/31/2017.
  */
 
-public class FetchJson extends AsyncTask<Void, Void, JSONObject>{
+public class FetchJson extends AsyncTask<Void, Void, JSONArray> {
 
     @Override
-    public JSONObject doInBackground(Void... params) {
+    public JSONArray doInBackground(Void... params) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         URLConnection urlConn;
 
-        try
-        {
-            URL url = new URL("http://curewitz.com/get_location_android.php");
+        try {
+            URL url = new URL("https://curewitz.com/location");
             urlConn = url.openConnection();
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
 
             StringBuffer stringBuffer = new StringBuffer();
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 stringBuffer.append(line);
                 Log.d("JSON", line);
             }
 
-            JSONObject jsonObject = new JSONObject(String.valueOf(stringBuffer));
-            JSONArray jsonArray = jsonObject.getJSONArray("Location");
-            Log.d("JSON STRING", jsonArray.toString());
+            JSONArray jsonArray = new JSONArray(String.valueOf(stringBuffer));
 
             br.close();
-            return jsonObject;
+            return jsonArray;
 
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             Log.e("App", "Null", ex);
             return null;
-        }
-    }
-
-    @Override
-    protected void onPostExecute(JSONObject response)
-    {
-        if(response != null)
-        {
-            try {
-                Log.e("App", "Success: " + response.getString("yourJsonElement") );
-            } catch (JSONException ex) {
-                Log.e("App", "Failure", ex);
-            }
         }
     }
 }
